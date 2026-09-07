@@ -1,0 +1,16 @@
+# Local end-to-end run: `docker compose up --build`
+# Backend on :8000, frontend on :8080. Put your key in a .env file first.
+services:
+  backend:
+    build: ./backend
+    ports: ["8000:8080"]
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - ALLOWED_ORIGINS=http://localhost:8080
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE: "http://localhost:8000"
+    ports: ["8080:8080"]
+    depends_on: [backend]
